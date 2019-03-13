@@ -1,0 +1,33 @@
+
+<div *ngIf= "! _loading" class="text-center" >
+<img src="/assets/waiting.gif" alt="Please wait">
+
+</div>
+<table class="table">
+    <thead  class="bg-secondary text-light">
+      <tr>
+        <th scope="col"> Author </th>
+        <th scope="col">Doctype </th>
+        <th scope="col">Filename</th>
+        <th scope="col">Mimetype</th>
+      </tr>
+    </thead>
+    <tbody    *ngFor="let item of DocsOb">
+      <tr>
+       
+        <td>{{item.Record.author}}    </td>
+        <td> {{item.Record.docType}}  </td>
+        <td>{{item.Record.filename}}  </td>
+        <td> {{item.Record.mimetype}} </td>  
+
+        <td>
+           <!-- <a href= 'home/babita/Desktop/Project/fabric-samples/balance-transfer/{{item.Record.path}}'   target="_self" class="btn btn-primary"  download={{item.Record.filename}}   >  Download  </a>
+           -->
+
+           <button type="button" class="btn btn-primary" (click)="download( $event, item.Record.path , item.Record.filename )">Download</button>
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+

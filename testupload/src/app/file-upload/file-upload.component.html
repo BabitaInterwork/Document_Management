@@ -1,0 +1,13 @@
+<div class="container">
+  <h1 class="text-center">
+   Upload File 
+  </h1>
+  <div class="container">
+  <input type="file" name="photo" ng2FileSelect [uploader]="uploader"  class="btn btn-primary btn-sm mr-auto" />  
+  <button type="button" class="btn btn-success btn-s  float-right"
+        (click)="uploader.uploadAll()" 
+        [disabled]="!uploader.getNotUploadedItems().length">
+        Upload
+  </button>
+  </div>
+</div>
