@@ -59,12 +59,13 @@ app.set('secret', 'thisismysecret');
 app.use(expressJWT({
 	secret: 'thisismysecret'
 }).unless({
-	path: ['/users','/doc/','/doc/upload']
+	path: ['/users/authenticate']
 }));
 
 
 
 app.use(bearerToken());
+
 app.use(function(req, res, next) {
 	logger.debug(' ------>>>>>> new request for %s',req.originalUrl);
 	if (req.originalUrl.indexOf('/users') >= 0) {
@@ -436,3 +437,5 @@ app.get('/channels', async function(req, res) {
 
 
 app.use('/doc',doc);
+app.use('/users', require('./routes/users'));
+

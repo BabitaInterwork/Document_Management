@@ -3,13 +3,14 @@ import { Routes, RouterModule } from '@angular/router';
 import {HomeComponent} from './home/home.component'
 import {FileUploadComponent} from './file-upload/file-upload.component'
 import {ViewDocsComponent} from './view-docs/view-docs.component'
+import {LoginComponent} from './login/login.component'
 
 const routes: Routes = [
 
 { path: 'home', component: HomeComponent },
 {path: 'upload' , component: FileUploadComponent},
-{path :  'Docs' , component:ViewDocsComponent}
-
+{path :  'Docs' , component:ViewDocsComponent},
+{ path: 'login', component: LoginComponent },
 
 ];
 

@@ -12,3 +12,5 @@ app.use(express.static(path.join(__dirname, "public")));
 app.get('/download', (req, res) => {
 res.attachment(path.join(__dirname, "uploads/Babita (2).pdf/2019-3-12 10:39:58.pdf"));
 });
+
+

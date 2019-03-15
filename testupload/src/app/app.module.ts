@@ -11,27 +11,53 @@ import { NgFlashMessagesModule } from 'ng-flash-messages';
 import { ViewDocsComponent } from './view-docs/view-docs.component';
 //import { BrowserModule }    from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import { CommonModule } from '@angular/common';  
- 
+import { CommonModule } from '@angular/common';
+import { LoginComponent } from './login/login.component';
+import { AlertComponent } from './alert/alert.component';  
+import { FormsModule }   from '@angular/forms';
+import {AuthGuard} from './auth.guard' ;
+import {AlertService} from './alert.service' 
+import {UserService} from './user.service' ;
+import {JwtInterceptorProvider} from './helpers/jwt.interceptor' ;
+import {ErrorInterceptorProvider} from './helpers/error.interceptor'
+import {AuthenticateService}  from './authenticate.service' 
 
 @NgModule({
   declarations: [
+    
     AppComponent,
     FileSelectDirective,
     NavComponent,
     FileUploadComponent,
     HomeComponent,
     
-    ViewDocsComponent
+    ViewDocsComponent,
+    
+    LoginComponent,
+    
+    AlertComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     CommonModule,
+    FormsModule ,
+    
+    
     NgFlashMessagesModule.forRoot()
   ],
-  providers: [],
+
+  providers: [
+
+    AuthGuard,
+    AlertService,
+    AuthenticateService,
+    UserService,
+    JwtInterceptorProvider,
+    ErrorInterceptorProvider,
+  ],
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }
