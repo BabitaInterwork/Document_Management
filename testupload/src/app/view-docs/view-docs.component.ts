@@ -16,6 +16,7 @@ import { HttpClient,HttpHeaders } from '@angular/common/http';
 export class ViewDocsComponent implements OnInit {
 Docs:string
 DocsOb:object
+
 private _loading: boolean = false;
 
 downloadLocation :string="http://localhost/"

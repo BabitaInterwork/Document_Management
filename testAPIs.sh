@@ -15,6 +15,7 @@ fi
 starttime=$(date +%s)
 
 # Print the usage message
+
 function printHelp () {
   echo "Usage: "
   echo "  ./testAPIs.sh -l golang|node"
@@ -57,7 +58,7 @@ echo
 ORG1_TOKEN=$(curl -s -X POST \
   http://localhost:4000/users \
   -H "content-type: application/x-www-form-urlencoded" \
-  -d 'username=Jim&orgName=Org1')
+  -d 'username=jim&orgName=Org1')
 echo $ORG1_TOKEN
 ORG1_TOKEN=$(echo $ORG1_TOKEN | jq ".token" | sed "s/\"//g")
 echo

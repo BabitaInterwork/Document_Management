@@ -5,7 +5,6 @@ import { NgFlashMessageService } from 'ng-flash-messages';
 
 const URL = 'http://localhost:4000/doc/upload';
 
-const token ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTI1MDQ2MzcsInVzZXJuYW1lIjoiQmFycnkiLCJvcmdOYW1lIjoiT3JnMiIsImlhdCI6MTU1MjQ2ODYzN30.Eyq2d4wjZgzbYJ_xq8Y9ttReGb22NEcH0lX6AGFLnSU'
 
 
 @Component({
@@ -14,14 +13,25 @@ const token ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTI1MDQ2MzcsInVzZ
   styleUrls: ['./file-upload.component.css']
 })
 export class FileUploadComponent implements OnInit {
+  authToken
 
   constructor(private ngFlashMessageService: NgFlashMessageService) { }
 
-  public uploader:FileUploader = new FileUploader({url: URL,headers:[{name:'authorization',value:'Bearer '+token}], itemAlias: 'photo'});
+  public uploader:FileUploader = new FileUploader({url: URL,headers:[{name:'authorization',value:this.authToken}], itemAlias: 'photo'});
   
   title = 'app works!';
 
   ngOnInit() {
+
+
+    var user=   localStorage.getItem('currentUser')
+  
+    var ObUser=JSON.parse(user);
+    
+    this.authToken='Bearer '+ObUser.token;
+    console.log(`This auth token ${this.authToken} ` );
+    
+  
    
     this.uploader.onAfterAddingFile = (file)=> { file.withCredentials = false; };
     

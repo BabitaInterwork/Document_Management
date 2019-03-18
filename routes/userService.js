@@ -21,19 +21,15 @@ service.delete = _delete;
 module.exports = service;
 
 function authenticate(username, password) {     
-console.log("usernaem ,pass" , username,password);
+    
+
     var deferred = Q.defer();
 
-console.log("inside");
-
-//console.log("DB   ........USERS ",db.users.find());
 
     db.users.findOne({ username: username }, function (err, user) {
-        console.log("inside   of ...................!!!");
-        console.log("user hash ");
-      //  console.log(`user name ${user.name}`);
+       
         if (err)
-        {  console.log("inside error ");
+        { 
             deferred.reject(err.name + ': ' + err.message);
         
         }
@@ -42,11 +38,14 @@ console.log("inside");
          
             // authentication successful
             deferred.resolve({
-                _id: user._id,
+              
                 username: user.username,
                 firstName: user.firstName,
                 lastName: user.lastName,
-                token: jwt.sign({ sub: user._id }, config.secret)
+                
+                token: jwt.sign({username: user.username,
+                                     orgName: user.orgName },
+                                      config.secret)
             });
 
 

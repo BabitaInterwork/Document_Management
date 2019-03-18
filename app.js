@@ -27,6 +27,7 @@ var expressJWT = require('express-jwt');
 var jwt = require('jsonwebtoken');
 var bearerToken = require('express-bearer-token');
 var cors = require('cors');
+var config =require('./config.json')
 
 require('./config.js');
 var hfc = require('fabric-client');
@@ -42,6 +43,7 @@ var query = require('./app/query.js');
 var host = process.env.HOST || hfc.getConfigSetting('host');
 var port = process.env.PORT || hfc.getConfigSetting('port');
 var doc=require('./routes/doc')
+//var authenticate =require('./routes/authenticate')
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// SET CONFIGURATONS ////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -50,48 +52,66 @@ app.use(cors());
 //support parsing of application/json type post data
 app.use(bodyParser.json());
 //support parsing of application/x-www-form-urlencoded post data
+
 app.use(bodyParser.urlencoded({
 	extended: false
 }));
 // set secret variable
 app.set('secret', 'thisismysecret');
 
+
 app.use(expressJWT({
-	secret: 'thisismysecret'
-}).unless({
-	path: ['/users/authenticate']
-}));
+    secret: config.secret,
+    getToken: function (req) {
+        if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+            return req.headers.authorization.split(' ')[1];
+        } else if (req.query && req.query.token) {
+            return req.query.token;
+        }
+        return null;
+    }
+}).unless({ path: ['/user/authenticate', '/users'] }));
+
+
+// app.use(expressJWT({
+// 	secret: 'thisismysecret'
+// }).unless({
+// 	path: ['/users']
+// }));
 
 
 
-app.use(bearerToken());
+// app.use(bearerToken());
 
-app.use(function(req, res, next) {
-	logger.debug(' ------>>>>>> new request for %s',req.originalUrl);
-	if (req.originalUrl.indexOf('/users') >= 0) {
-		return next();
-	}
+// app.use(function(req, res, next) { 
 
-	var token = req.token;
-	jwt.verify(token, app.get('secret'), function(err, decoded) {
-		if (err) {
-			res.send({
-				success: false,
-				message: 'Failed to authenticate token. Make sure to include the ' +
-					'token returned from /users call in the authorization header ' +
-					' as a Bearer token'
-			});
-			return;
-		} else {
-			// add the decoded user name and org name to the request object
-			// for the downstream code to use
-			req.username = decoded.username;
-			req.orgname = decoded.orgName;
-			logger.debug(util.format('Decoded from JWT token: username - %s, orgname - %s', decoded.username, decoded.orgName));
-			return next();
-		}
-	});
-});
+// 	logger.debug(' ------>>>>>> new request for %s',req.originalUrl);
+
+// 	if (req.originalUrl.indexOf('/users') >= 0) {
+// 		return next();
+// 	}
+
+// 	var token = req.token;
+
+// 	jwt.verify(token, app.get('secret'), function(err, decoded) {
+// 		if (err) {
+// 			res.send({
+// 				success: false,
+// 				message: 'Failed to authenticate token. Make sure to include the ' +
+// 					'token returned from /users call in the authorization header ' +
+// 					' as a Bearer token'
+// 			});
+// 			return;
+// 		} else {
+// 			// add the decoded user name and org name to the request object
+// 			// for the downstream code to use
+// 			req.username = decoded.username;
+// 			req.orgname = decoded.orgName;
+// 			logger.debug(util.format('Decoded from JWT token: username - %s, orgname - %s', decoded.username, decoded.orgName));
+// 			return next();
+// 		}
+// 	});
+// });
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// START SERVER /////////////////////////////////
@@ -102,11 +122,13 @@ logger.info('***************  http://%s:%s  ******************',host,port);
 server.timeout = 240000;
 
 function getErrorMessage(field) {
+	
 	var response = {
 		success: false,
 		message: field + ' field is missing or Invalid in the request'
 	};
 	return response;
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -120,30 +142,46 @@ app.post('/users', async function(req, res) {
 	logger.debug('User name : ' + username);
 	logger.debug('Org name  : ' + orgName);
 	if (!username) {
+
 		res.json(getErrorMessage('\'username\''));
 		return;
+
 	}
 	if (!orgName) {
+
 		res.json(getErrorMessage('\'orgName\''));
 		return;
+
 	}
-	var token = jwt.sign({
-		exp: Math.floor(Date.now() / 1000) + parseInt(hfc.getConfigSetting('jwt_expiretime')),
-		username: username,
-		orgName: orgName
-	}, app.get('secret'));
+	// var token = jwt.sign({
+	// 	exp: Math.floor(Date.now() / 1000) + parseInt(hfc.getConfigSetting('jwt_expiretime')),
+	// 	username: username,
+	// 	orgName: orgName
+	// }, app.get('secret')) ;
+
 	let response = await helper.getRegisteredUser(username, orgName, true);
 	logger.debug('-- returned from registering the username %s for organization %s',username,orgName);
+	
 	if (response && typeof response !== 'string') {
 		logger.debug('Successfully registered the username %s for organization %s',username,orgName);
-		response.token = token;
+
+	//	response.token=token;
+
 		res.json(response);
+
+
+
 	} else {
+
 		logger.debug('Failed to register the username %s for organization %s with::%s',username,orgName,response);
+		
 		res.json({success: false, message: response});
+		
 	}
 
 });
+
+
 // Create Channel
 app.post('/channels', async function(req, res) {
 	logger.info('<<<<<<<<<<<<<<<<< C R E A T E  C H A N N E L >>>>>>>>>>>>>>>>>');
@@ -164,6 +202,10 @@ app.post('/channels', async function(req, res) {
 	let message = await createChannel.createChannel(channelName, channelConfigPath, req.username, req.orgname);
 	res.send(message);
 });
+
+
+
+
 // Join Channel
 app.post('/channels/:channelName/peers', async function(req, res) {
 	logger.info('<<<<<<<<<<<<<<<<< J O I N  C H A N N E L >>>>>>>>>>>>>>>>>');
@@ -380,6 +422,7 @@ app.get('/channels/:channelName/transactions/:trxnId', async function(req, res) 
 	let message = await query.getTransactionByID(peer, req.params.channelName, trxnId, req.username, req.orgname);
 	res.send(message);
 });
+
 // Query Get Block by Hash
 app.get('/channels/:channelName/blocks', async function(req, res) {
 	logger.debug('================ GET BLOCK BY HASH ======================');
@@ -435,7 +478,8 @@ app.get('/channels', async function(req, res) {
 	res.send(message);
 });
 
+// app.use('/authenticate' ,authenticate )
+
 
 app.use('/doc',doc);
-app.use('/users', require('./routes/users'));
-
+app.use('/user', require('./routes/user'));
