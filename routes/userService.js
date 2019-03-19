@@ -4,6 +4,8 @@ var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var Q = require('q');
 var mongo = require('mongoskin');
+var hfc = require('fabric-client');
+
 var db = mongo.db(config.connectionString, { native_parser: true },{useNewUrlParser: true });
 db.bind('users');
 
@@ -43,8 +45,12 @@ function authenticate(username, password) {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 
-                token: jwt.sign({username: user.username,
-                                     orgName: user.orgName },
+                token: jwt.sign({exp: Math.floor(Date.now() / 1000) + parseInt(hfc.getConfigSetting('jwt_expiretime')),
+
+                username: user.username,
+                orgName: user.orgName
+                     
+                               },
                                       config.secret)
             });
 
@@ -54,6 +60,8 @@ function authenticate(username, password) {
 
             // authentication failed
             deferred.resolve();
+
+
 
 
         }

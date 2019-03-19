@@ -57,11 +57,11 @@ app.use(bodyParser.urlencoded({
 	extended: false
 }));
 // set secret variable
-app.set('secret', 'thisismysecret');
+app.set('secret', 'interwork');
 
 
 app.use(expressJWT({
-    secret: config.secret,
+    secret: 'interwork',
     getToken: function (req) {
         if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
             return req.headers.authorization.split(' ')[1];
@@ -74,44 +74,44 @@ app.use(expressJWT({
 
 
 // app.use(expressJWT({
-// 	secret: 'thisismysecret'
+// 	secret: 'interwork'
 // }).unless({
-// 	path: ['/users']
+// 	path: ['/users','/user/authenticate']
 // }));
 
 
 
-// app.use(bearerToken());
+ app.use(bearerToken());
 
-// app.use(function(req, res, next) { 
+app.use(function(req, res, next) { 
 
-// 	logger.debug(' ------>>>>>> new request for %s',req.originalUrl);
+	logger.debug(' ------>>>>>> new request for %s',req.originalUrl);
 
-// 	if (req.originalUrl.indexOf('/users') >= 0) {
-// 		return next();
-// 	}
+	if (req.originalUrl.indexOf('/users') >= 0) {
+		return next();
+	}
 
-// 	var token = req.token;
+	var token = req.token;
 
-// 	jwt.verify(token, app.get('secret'), function(err, decoded) {
-// 		if (err) {
-// 			res.send({
-// 				success: false,
-// 				message: 'Failed to authenticate token. Make sure to include the ' +
-// 					'token returned from /users call in the authorization header ' +
-// 					' as a Bearer token'
-// 			});
-// 			return;
-// 		} else {
-// 			// add the decoded user name and org name to the request object
-// 			// for the downstream code to use
-// 			req.username = decoded.username;
-// 			req.orgname = decoded.orgName;
-// 			logger.debug(util.format('Decoded from JWT token: username - %s, orgname - %s', decoded.username, decoded.orgName));
-// 			return next();
-// 		}
-// 	});
-// });
+	jwt.verify(token, app.get('secret'), function(err, decoded) {
+		if (err) {
+			res.send({
+				success: false,
+				message: 'Failed to authenticate token. Make sure to include the ' +
+					'token returned from /users call in the authorization header ' +
+					' as a Bearer token'
+			});
+			return;
+		} else {
+			// add the decoded user name and org name to the request object
+			// for the downstream code to use
+			req.username = decoded.username;
+			req.orgname = decoded.orgName;
+			logger.debug(util.format('Decoded from JWT token: username - %s, orgname - %s', decoded.username, decoded.orgName));
+			return next();
+		}
+	});
+});
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// START SERVER /////////////////////////////////
@@ -153,11 +153,7 @@ app.post('/users', async function(req, res) {
 		return;
 
 	}
-	// var token = jwt.sign({
-	// 	exp: Math.floor(Date.now() / 1000) + parseInt(hfc.getConfigSetting('jwt_expiretime')),
-	// 	username: username,
-	// 	orgName: orgName
-	// }, app.get('secret')) ;
+if(username === 'jim'){
 
 	let response = await helper.getRegisteredUser(username, orgName, true);
 	logger.debug('-- returned from registering the username %s for organization %s',username,orgName);
@@ -165,7 +161,7 @@ app.post('/users', async function(req, res) {
 	if (response && typeof response !== 'string') {
 		logger.debug('Successfully registered the username %s for organization %s',username,orgName);
 
-	//	response.token=token;
+		response.token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTMwMjE5MjksInVzZXJuYW1lIjoiamltIiwib3JnTmFtZSI6Ik9yZzEiLCJpYXQiOjE1NTI5ODU5Mjl9.FCV_zRuCpAHzbcOpon7_WDSapOOL1Wfd7eQ1gHhBDs8";
 
 		res.json(response);
 
@@ -178,6 +174,43 @@ app.post('/users', async function(req, res) {
 		res.json({success: false, message: response});
 		
 	}
+
+
+}
+	
+
+else{
+
+	var token = jwt.sign({
+		exp: Math.floor(Date.now() / 1000) + parseInt(hfc.getConfigSetting('jwt_expiretime')),
+		username: username,
+		orgName: orgName
+	}, app.get('secret')) ;
+
+	let response = await helper.getRegisteredUser(username, orgName, true);
+	logger.debug('-- returned from registering the username %s for organization %s',username,orgName);
+	
+	if (response && typeof response !== 'string') {
+		logger.debug('Successfully registered the username %s for organization %s',username,orgName);
+
+		response.token=token;
+
+		res.json(response);
+
+
+
+	} else {
+
+		logger.debug('Failed to register the username %s for organization %s with::%s',username,orgName,response);
+		
+		res.json({success: false, message: response});
+		
+	}
+}
+
+
+	
+	
 
 });
 

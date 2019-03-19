@@ -13,5 +13,5 @@
    ],
    "connectionString": "mongodb://localhost:27017/document_Management",
     "apiUrl": "http://localhost:4000",
-    "secret": "Interwork"
+    "secret": "interwork"
 }
