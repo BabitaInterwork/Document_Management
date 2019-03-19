@@ -28,7 +28,7 @@ var jwt = require('jsonwebtoken');
 var bearerToken = require('express-bearer-token');
 var cors = require('cors');
 var config =require('./config.json')
-
+const fs = require('fs');
 require('./config.js');
 var hfc = require('fabric-client');
 
@@ -70,7 +70,7 @@ app.use(expressJWT({
         }
         return null;
     }
-}).unless({ path: ['/user/authenticate', '/users'] }));
+}).unless({ path: ['/user/authenticate', '/users','/users/token'] }));
 
 
 // app.use(expressJWT({
@@ -90,6 +90,22 @@ app.use(function(req, res, next) {
 	if (req.originalUrl.indexOf('/users') >= 0) {
 		return next();
 	}
+	if (req.originalUrl.indexOf('/user') >= 0) {
+		return next();
+	}
+
+	if(req.originalUrl === '/user/authenticate' ){
+
+		return next ;
+	}
+	if(req.originalUrl === '/users/token' ){
+
+		return next ;
+	}
+
+
+	
+
 
 	var token = req.token;
 
@@ -213,6 +229,26 @@ else{
 	
 
 });
+
+
+app.post('/users/token',(req,res)=>{
+	let token =req.body.token;
+	console.log(token);
+	console.log("inside   token  !");
+	
+	fs.writeFile("./token.txt", token, function(err) {
+		
+		if(err) {
+			return console.log(err);
+		}
+	
+		console.log("The file was saved!");
+	}); 
+
+
+} )
+
+
 
 
 // Create Channel

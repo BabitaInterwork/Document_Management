@@ -26,7 +26,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AlertService  } from '../alert.service';
-
+import { appConfig } from '../app.config';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {AuthenticateService} from '../authenticate.service' ;
 
 @Component({
@@ -38,13 +39,18 @@ export class LoginComponent implements OnInit {
     model: any = {};
     loading = false;
     returnUrl: string;
+    token
 
     constructor(
         private route: ActivatedRoute,
         private router: Router,
         private authenticationService: AuthenticateService,
-        private alertService: AlertService) { }
+        private alertService: AlertService,
+        private http: HttpClient
+        ) { }
 
+
+        
     ngOnInit() {
         // reset login status
         this.authenticationService.logout();
@@ -56,10 +62,16 @@ export class LoginComponent implements OnInit {
     login() {
 
         this.loading = true;
+
+
         this.authenticationService.login(this.model.username, this.model.password)
             .subscribe(
                 data => {
                     
+                    
+                   // this.setToken()
+                    
+                
                     this.router.navigate([this.returnUrl]);
 
                 },
@@ -69,5 +81,37 @@ export class LoginComponent implements OnInit {
                     
                 });
 
+
+               
+
+                
+                
+
+
+
+
+
+
+    }
+
+
+
+
+    setToken(){
+
+        let tokenFromLocalStroage=localStorage.getItem('currentUser')
+       console.log(`tokenFromLocalStroage  ${tokenFromLocalStroage}`);
+        let tokenn= JSON.parse(tokenFromLocalStroage);
+        console.log("as tokenn",tokenn);
+        this.token=tokenn.token;
+        console.log(`to k ${this.token}`);
+   let   myToken={
+token:this.token
+
+   }
+    
+   this.http.post(appConfig.apiUrl + '/users/token' ,myToken)
+    console.log('after.............');
+    
     }
 }
