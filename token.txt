@@ -1,1 +1,1 @@
-undefined
+{"username":"jim","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTMxMDQ5MDcsInVzZXJuYW1lIjoiamltIiwib3JnTmFtZSI6Ik9yZzEiLCJpYXQiOjE1NTMwNjg5MDd9.tRyma78nfVog1YygZpv6U7WLBMHSgTRt6zMpH9yYm2U"}

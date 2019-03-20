@@ -113,76 +113,76 @@ curl -s -X POST \
 echo
 echo
 
-echo "POST request Update anchor peers on Org1"
-echo
-curl -s -X POST \
-  http://localhost:4000/channels/mychannel/anchorpeers \
-  -H "authorization: Bearer $ORG1_TOKEN" \
-  -H "content-type: application/json" \
-  -d '{
-	"configUpdatePath":"../artifacts/channel/Org1MSPanchors.tx"
-}'
-echo
-echo
+# echo "POST request Update anchor peers on Org1"
+# echo
+# curl -s -X POST \
+#   http://localhost:4000/channels/mychannel/anchorpeers \
+#   -H "authorization: Bearer $ORG1_TOKEN" \
+#   -H "content-type: application/json" \
+#   -d '{
+# 	"configUpdatePath":"../artifacts/channel/Org1MSPanchors.tx"
+# }'
+# echo
+# echo
 
-echo "POST request Update anchor peers on Org2"
-echo
-curl -s -X POST \
-  http://localhost:4000/channels/mychannel/anchorpeers \
-  -H "authorization: Bearer $ORG2_TOKEN" \
-  -H "content-type: application/json" \
-  -d '{
-	"configUpdatePath":"../artifacts/channel/Org2MSPanchors.tx"
-}'
-echo
-echo
+# echo "POST request Update anchor peers on Org2"
+# echo
+# curl -s -X POST \
+#   http://localhost:4000/channels/mychannel/anchorpeers \
+#   -H "authorization: Bearer $ORG2_TOKEN" \
+#   -H "content-type: application/json" \
+#   -d '{
+# 	"configUpdatePath":"../artifacts/channel/Org2MSPanchors.tx"
+# }'
+# echo
+# echo
 
-echo "POST Install chaincode on Org1"
-echo
-curl -s -X POST \
-  http://localhost:4000/chaincodes \
-  -H "authorization: Bearer $ORG1_TOKEN" \
-  -H "content-type: application/json" \
-  -d "{
-	\"peers\": [\"peer0.org1.example.com\",\"peer1.org1.example.com\"],
-	\"chaincodeName\":\"mycc\",
-	\"chaincodePath\":\"$CC_SRC_PATH\",
-	\"chaincodeType\": \"$LANGUAGE\",
-	\"chaincodeVersion\":\"v0\"
-}"
-echo
-echo
+# echo "POST Install chaincode on Org1"
+# echo
+# curl -s -X POST \
+#   http://localhost:4000/chaincodes \
+#   -H "authorization: Bearer $ORG1_TOKEN" \
+#   -H "content-type: application/json" \
+#   -d "{
+# 	\"peers\": [\"peer0.org1.example.com\",\"peer1.org1.example.com\"],
+# 	\"chaincodeName\":\"mycc\",
+# 	\"chaincodePath\":\"$CC_SRC_PATH\",
+# 	\"chaincodeType\": \"$LANGUAGE\",
+# 	\"chaincodeVersion\":\"v0\"
+# }"
+# echo
+# echo
 
-echo "POST Install chaincode on Org2"
-echo
-curl -s -X POST \
-  http://localhost:4000/chaincodes \
-  -H "authorization: Bearer $ORG2_TOKEN" \
-  -H "content-type: application/json" \
-  -d "{
-	\"peers\": [\"peer0.org2.example.com\",\"peer1.org2.example.com\"],
-	\"chaincodeName\":\"mycc\",
-	\"chaincodePath\":\"$CC_SRC_PATH\",
-	\"chaincodeType\": \"$LANGUAGE\",
-	\"chaincodeVersion\":\"v0\"
-}"
-echo
-echo
+# echo "POST Install chaincode on Org2"
+# echo
+# curl -s -X POST \
+#   http://localhost:4000/chaincodes \
+#   -H "authorization: Bearer $ORG2_TOKEN" \
+#   -H "content-type: application/json" \
+#   -d "{
+# 	\"peers\": [\"peer0.org2.example.com\",\"peer1.org2.example.com\"],
+# 	\"chaincodeName\":\"mycc\",
+# 	\"chaincodePath\":\"$CC_SRC_PATH\",
+# 	\"chaincodeType\": \"$LANGUAGE\",
+# 	\"chaincodeVersion\":\"v0\"
+# }"
+# echo
+# echo
 
-echo "POST instantiate chaincode on Org1"
-echo
-curl -s -X POST \
-  http://localhost:4000/channels/mychannel/chaincodes \
-  -H "authorization: Bearer $ORG1_TOKEN" \
-  -H "content-type: application/json" \
-  -d "{
-	\"chaincodeName\":\"mycc\",
-	\"chaincodeVersion\":\"v0\",
-	\"chaincodeType\": \"$LANGUAGE\",
-	\"args\":[\"a\",\"100\",\"b\",\"200\"]
-}"
-echo
-echo
+# echo "POST instantiate chaincode on Org1"
+# echo
+# curl -s -X POST \
+#   http://localhost:4000/channels/mychannel/chaincodes \
+#   -H "authorization: Bearer $ORG1_TOKEN" \
+#   -H "content-type: application/json" \
+#   -d "{
+# 	\"chaincodeName\":\"mycc\",
+# 	\"chaincodeVersion\":\"v0\",
+# 	\"chaincodeType\": \"$LANGUAGE\",
+# 	\"args\":[\"a\",\"100\",\"b\",\"200\"]
+# }"
+# echo
+# echo
 
 # echo "POST invoke chaincode on peers of Org1 and Org2"
 # echo

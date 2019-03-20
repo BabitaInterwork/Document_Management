@@ -17,7 +17,7 @@ import { appConfig } from './app.config';
 
 @Injectable()
 export class AuthenticateService {
-  token ;
+  
     constructor(private http: HttpClient) { }
 
     login(username: string, password: string) {
@@ -54,18 +54,6 @@ export class AuthenticateService {
 
 
     }
-
-setToken(){
-
-    let tokenFromLocalStroage=localStorage.getItem('currentUser')
-    this.token= JSON.parse(tokenFromLocalStroage).token;
-    console.log(`to k ${this.token}`);
-
-
-this.http.post<any>(appConfig.apiUrl + '/users/token', { token:this.token }).map( message =>console.log(message) )
-console.log('after.............');
-
-}
 
 
     logout() {
