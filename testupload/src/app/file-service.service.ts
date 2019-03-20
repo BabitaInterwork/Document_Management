@@ -9,10 +9,16 @@ import {Observable} from 'rxjs';
   providedIn: 'root'
 })
 export class FileServiceService {
-  authToken ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTI1MDQ2MzcsInVzZXJuYW1lIjoiQmFycnkiLCJvcmdOYW1lIjoiT3JnMiIsImlhdCI6MTU1MjQ2ODYzN30.Eyq2d4wjZgzbYJ_xq8Y9ttReGb22NEcH0lX6AGFLnSU'
-
+  authToken 
 
   constructor(private http:HttpClient) { }
+
+
+  ngOnInit(){
+   this.authToken= JSON.parse(localStorage.getItem("currentUser")).token
+
+
+  }
 
   downloadFile(filepath:String,filename:String ){
 
@@ -31,6 +37,29 @@ export class FileServiceService {
 
     });
 }
+
+
+showversion(event,filename:String){
+  console.log('====in showversion=====')
+
+
+  const headers = new HttpHeaders({
+    'Content-Type':  'application/json',
+    'Authorization': 'Bearer '+this.authToken
+  });
+
+  var body = {filename:filename};
+   return  this.http.post('http://localhost:4000/doc/getVersion',JSON.stringify(body),{
+      headers:headers
+  })
+
+
+
+
+}
+
+
+
 
 
 

@@ -205,6 +205,58 @@ function   invokeForDocs(req,res ){
 });
 
 
+router.post('/getVersion' ,(req,res)=>{
+console.log('##################IN  GET  VERSION  #############################');
+let filename=req.body.filename;
+ 
+getVersion(req,res,filename)
+
+
+} )
+
+function getVersion(req,res,filename){
+  console.log("##################in get version function################3");
+
+
+  request({
+    headers: {
+        'content-type': 'application/json',
+        'authorization' :req.headers.authorization
+    },
+    uri: 'http://localhost:4000/channels/mychannel/chaincodes/mycc',
+    body: {
+          "peers": ["peer0.org1.example.com","peer0.org2.example.com"],
+          "fcn":'getHistoryForDocumnent' ,
+          "args":[filename]
+        },
+        json: true,
+    method: 'POST'
+  }, function (err, response, body) {
+
+    console.log("##################response################3");
+    console.log(typeof body);
+    // var stringData=JSON.stringify(body)
+    // var obData= JSON.parse(stringData)
+
+ console.log("body",  body);
+
+  //console.log("response",response);
+ // console.log(object);
+  // let a= JSON.stringify(body.message );
+  // console.log(a);
+
+  notifier.notify({
+    title: 'My notification',
+    message: body
+  });
+
+res.send(body.myMessage)
+  
+  });
+
+
+
+}
 
 
 module.exports = router;

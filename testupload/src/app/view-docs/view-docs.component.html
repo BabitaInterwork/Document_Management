@@ -1,45 +1,63 @@
 
 <div *ngIf= "! _loading" class="text-center" >
-<img src="/assets/waiting.gif" alt="Please wait">
+
+  <img src="/assets/waiting.gif" alt="Please wait">
 
 </div>
-<table class="table">
-    <thead  class="bg-secondary text-light">
-      <tr>
-        <th scope="col"> Author </th>
-        <th scope="col">Doctype </th>
-        <th scope="col">Filename</th>
-        <th scope="col">Mimetype</th>
-      </tr>
-    </thead>
-    <tbody    *ngFor="let item of DocsOb | paginate: { itemsPerPage: 4, currentPage: p } ">
-      <tr>
-       
-        <td>{{item.Record.author}}    </td>
-        <td> {{item.Record.docType}}  </td>
-        <td>{{item.Record.filename}}  </td>
-        <td> {{item.Record.mimetype}} </td>  
 
-        <td>
-           <!-- <a href= 'home/babita/Desktop/Project/fabric-samples/balance-transfer/{{item.Record.path}}'   target="_self" class="btn btn-primary"  download={{item.Record.filename}}   >  Download  </a>
-           -->
+<div id="panel-group">
+  <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">name of document</th>
+          <th scope="col">author</th>
+          <th scope="col">timestamp</th>
+          <th scope="col">download</th>
 
-           <button type="button" class="btn btn-primary" (click)="download( $event, item.Record.path , item.Record.filename )">Download</button>
+        </tr>
+      </thead>
 
-        </td>
-      </tr>
-     
-    </tbody>
+      <tbody  *ngFor="let document of DocsOb| paginate: { itemsPerPage: 4, currentPage: p }; let i = index">
+
+        <tr  id="tablerow" (click)="showversion($event,document.Record.orginalname)"  (click)="current = i; loading=true">
+
+          <th scope="row">{{document.Record.orginalname}}</th>
+          <td>{{document.Record.author}}</td>
+          <td>{{document.Record.timestamp}}</td>
+          <td><button class="btn btn-primary"   (click)="downloadFile($event, document.Record.path,document.Record.filename)">Download</button></td>
 
 
+    </tr>
+    <tr>
+      <td colspan=5>
+
+
+        <div id="table2"  class="table" id="collapse1" class="panel-collapse" [class.collapse]='current != i'>
+          
+                  <tbody *ngFor="let doc of versionfiles">
+                  <tr colspan="4" id="tablerow2" (click)="showversion($event,doc.Record.orginalname)">
+                   
+                    <th scope="row">{{doc.orginalname}}</th>
+                    <td>{{doc.author}}</td>
+                    <td>{{doc.timestamp}}</td>
+                    <td>V : {{doc.version}}</td>
+                    <td><button class="btn btn-primary"   (click)="downloadFile($event, doc.Record.path,doc.Record.filename)">Download</button></td>
+                  </tr>
+                  </tbody>
+
+          </div>
+          </td>
+          </tr>
+
+
+        </tbody>
   </table>
 
+</div>
+<!-- 
+<img id="spinner" class="center" *ngIf="loading" src="assets/waiting.gif"/> -->
 
-  <div class="text-center">
 
-    <pagination-controls (pageChange)="p = $event"></pagination-controls>
-    `
-  </div>
-  
 
+<div id="paginationcontrol"><pagination-controls (pageChange)="p = $event"></pagination-controls></div>
 

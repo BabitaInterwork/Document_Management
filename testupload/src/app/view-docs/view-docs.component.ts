@@ -16,8 +16,10 @@ import { HttpClient,HttpHeaders } from '@angular/common/http';
 export class ViewDocsComponent implements OnInit {
 Docs:string
 DocsOb:object
-
+current: number = 0;
 private _loading: boolean = false;
+versionfiles :any = [];
+  panelExpanded = true;
 
 p: number = 1;
 //collection: any[] = ;  
@@ -80,6 +82,20 @@ downloadLocation :string="http://localhost/"
         data =>  saveAs(data, filename),
         error => console.error(error)
     );
+}
+
+
+showversion(event, filename:String){
+this._fileService.showversion(event,filename).
+subscribe(data => {
+  //this._loading =false;
+
+
+ this.versionfiles=data;
+ console.log(this.versionfiles)
+ });
+
+
 }
 
 
