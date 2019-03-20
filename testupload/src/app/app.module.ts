@@ -20,7 +20,8 @@ import {AlertService} from './alert.service'
 import {UserService} from './user.service' ;
 import {JwtInterceptorProvider} from './helpers/jwt.interceptor' ;
 import {ErrorInterceptorProvider} from './helpers/error.interceptor'
-import {AuthenticateService}  from './authenticate.service' 
+import {AuthenticateService}  from './authenticate.service';
+import {NgxPaginationModule} from 'ngx-pagination'; // <-- import the module
 
 @NgModule({
   declarations: [
@@ -36,6 +37,8 @@ import {AuthenticateService}  from './authenticate.service'
     LoginComponent,
     
     AlertComponent,
+    
+
   ],
   imports: [
     BrowserModule,
@@ -43,7 +46,7 @@ import {AuthenticateService}  from './authenticate.service'
     HttpClientModule,
     CommonModule,
     FormsModule ,
-    
+    NgxPaginationModule,
     
     NgFlashMessagesModule.forRoot()
   ],

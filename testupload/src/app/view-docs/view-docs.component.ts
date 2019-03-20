@@ -19,7 +19,13 @@ DocsOb:object
 
 private _loading: boolean = false;
 
+p: number = 1;
+//collection: any[] = ;  
+
 downloadLocation :string="http://localhost/"
+
+
+
   constructor(private DocsService :DocRequestService,
     private router :Router,
     private _fileService:FileServiceService

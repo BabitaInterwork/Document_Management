@@ -55,7 +55,7 @@ router.get('/', function(req, res, next) {
   res.send('hello !')
 });
 
-function   invoke(req,res ,name,date,author,hash ,mimeType,location ){
+function   invoke(req,res ,name,date,author,hash ,mimeType,location ,fileoriginalname ,version){
 
 console.log(req.headers.authorization)
 
@@ -68,7 +68,7 @@ console.log(req.headers.authorization)
         body: {
               "peers": ["peer0.org1.example.com","peer0.org2.example.com"],
               "fcn":'upload',
-              "args":[name,date,author,hash ,mimeType,location]
+              "args":[name,date,author,hash ,mimeType,location,fileoriginalname ,version]
             },
             json: true,
         method: 'POST'
@@ -87,8 +87,7 @@ router.post('/upload', upload.single('photo'),function (req, res, next) {
  {
    console.log(req.file);
       console.log('file received');
-      console.log("===================================");
-      
+     
       let path=req.file.path;
       console.log(path);
 
@@ -96,6 +95,15 @@ router.post('/upload', upload.single('photo'),function (req, res, next) {
       // console.log(ext);
         let actualFileName= path.slice(ext)
         console.log("after slice of file name ",actualFileName);
+        console.log("===================================");
+      
+        let i1 = actualFileName.lastIndexOf('_')
+        
+        let i2= actualFileName.lastIndexOf('.');
+        
+        let version=actualFileName.substring(i1,i2);
+console.log(`file version ${version}`);
+
       var Hash;
       md5File(path).then(hash => {
             Hash=hash;
@@ -111,11 +119,13 @@ router.post('/upload', upload.single('photo'),function (req, res, next) {
       let mimeType=req.file.mimetype.toString();
       let hashh=Hash.toString();
       let date=Date.now().toString();
-       let author="Babita Bisht"
+      let fileoriginalname=req.file.originalname.toString();
+       let author="jim"
+       
 
     //  invoke(req,res ,name,location,size,mimeType,hashh ,date);
 
-      invoke(req,res ,name,date,author,hashh ,mimeType,location);
+      invoke(req,res ,name,date,author,hashh ,mimeType,location,fileoriginalname,version);
 
       })
 

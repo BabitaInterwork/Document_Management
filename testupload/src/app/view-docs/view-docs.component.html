@@ -12,7 +12,7 @@
         <th scope="col">Mimetype</th>
       </tr>
     </thead>
-    <tbody    *ngFor="let item of DocsOb">
+    <tbody    *ngFor="let item of DocsOb | paginate: { itemsPerPage: 4, currentPage: p } ">
       <tr>
        
         <td>{{item.Record.author}}    </td>
@@ -28,6 +28,18 @@
 
         </td>
       </tr>
+     
     </tbody>
+
+
   </table>
+
+
+  <div class="text-center">
+
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    `
+  </div>
+  
+
 
