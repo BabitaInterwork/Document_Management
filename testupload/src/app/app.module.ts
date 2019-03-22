@@ -21,7 +21,8 @@ import {UserService} from './user.service' ;
 import {JwtInterceptorProvider} from './helpers/jwt.interceptor' ;
 import {ErrorInterceptorProvider} from './helpers/error.interceptor'
 import {AuthenticateService}  from './authenticate.service';
-import {NgxPaginationModule} from 'ngx-pagination'; // <-- import the module
+import {NgxPaginationModule} from 'ngx-pagination';
+import { DashboardComponent } from './dashboard/dashboard.component'; // <-- import the module
 
 @NgModule({
   declarations: [
@@ -30,13 +31,16 @@ import {NgxPaginationModule} from 'ngx-pagination'; // <-- import the module
     FileSelectDirective,
     NavComponent,
     FileUploadComponent,
-    HomeComponent,
     
     ViewDocsComponent,
     
     LoginComponent,
     
     AlertComponent,
+    
+    DashboardComponent,
+    
+    HomeComponent,
     
 
   ],

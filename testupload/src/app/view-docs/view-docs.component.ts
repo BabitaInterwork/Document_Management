@@ -18,6 +18,8 @@ Docs:string
 DocsOb:object
 current: number = 0;
 private _loading: boolean = false;
+
+private _loadingforVersion: boolean = false;
 versionfiles :any = [];
   panelExpanded = true;
 
@@ -49,9 +51,6 @@ downloadLocation :string="http://localhost/"
       }
       
       console.log(this._loading);
-      // console.log( typeof data);
-      // console.log( JSON.stringify(data) )
-      // console.log("this",this.Docs);
       
       } )
   
@@ -73,7 +72,7 @@ downloadLocation :string="http://localhost/"
 
 
   download(event ,  filepath:string, filename:string){
-   
+   console.log("inside download");
 
 
     this._fileService.downloadFile( filepath, filename)
@@ -86,12 +85,20 @@ downloadLocation :string="http://localhost/"
 
 
 showversion(event, filename:String){
+
+  this._loadingforVersion=true;
+
 this._fileService.showversion(event,filename).
 subscribe(data => {
-  //this._loading =false;
-
+  
 
  this.versionfiles=data;
+
+ if(this.versionfiles == null || 'undefined' ){
+
+  this._loadingforVersion=false
+}
+
  console.log(this.versionfiles)
  });
 

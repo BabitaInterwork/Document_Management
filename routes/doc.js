@@ -29,24 +29,44 @@ console.log(file);
     cb(null,N_DIR);
   },
   filename: (req, file, cb) => {
+
+    //Naming the file 
 var count  
-console.log("file........",file);
+
 var dir= DIR + file.originalname;
 
 fs.readdir(dir, (err, files) => {
-  console.log(files.length);
+ 
   count=files.length
 
   console.log(count);
     let name= file.originalname;
    
     let ext =name.lastIndexOf('.');
-  // console.log(ext);
-    let a= name.slice(ext)
-    console.log("after slice ",a);
+  console.log(`ext ${ext}`);
+    var a= name.slice(ext);
+    console.log( typeof a);
+if( a === -1 ){
+
+console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Inside");
+
+  console.log("after slice ",a);
 
 let countt=count+1
-    cb(null, new Date().toLocaleString()+'_Ver'+countt+ a);
+
+console.log( new Date().toLocaleString()+'_Ver'+countt+ '.txt');
+
+    cb(null, new Date()+'_Ver'+countt+ '.txt');
+
+}else{
+  
+  console.log("after slice ",a);
+
+let countt=count+1;
+
+    cb(null, new Date()+'_Ver'+countt+ a);}
+
+    
 });
   }
 });
@@ -56,9 +76,6 @@ router.get('/', function(req, res, next) {
 });
 
 function   invoke(req,res ,name,date,author,hash ,mimeType,location ,fileoriginalname ,version){
-
-console.log(req.headers.authorization)
-
     request({
         headers: {
             'content-type': 'application/json',
@@ -85,49 +102,58 @@ console.log(req.headers.authorization)
 
 router.post('/upload', upload.single('photo'),function (req, res, next) {
  {
-   console.log(req.file);
-      console.log('file received');
-     
-      let path=req.file.path;
-      console.log(path);
 
-      let ext =path.lastIndexOf('/');
-      // console.log(ext);
-        let actualFileName= path.slice(ext)
-        console.log("after slice of file name ",actualFileName);
-        console.log("===================================");
+  if (!req.file) {
+		console.log("No file received");
+		return res.send({
+			success: false
+		});
+
+	} else{
+
+
+
+    console.log(req.file);
+    console.log('file received');
+   
+    let path=req.file.path;
+    console.log(path);
+
+    let ext =path.lastIndexOf('/');
+     console.log(ext);
+      let actualFileName= path.slice(ext+1)
+       
+      console.log("after slice of file name ",actualFileName);
+      console.log("===================================");
+     
+      let i1 = actualFileName.lastIndexOf('_')
       
-        let i1 = actualFileName.lastIndexOf('_')
-        
-        let i2= actualFileName.lastIndexOf('.');
-        
-        let version=actualFileName.substring(i1,i2);
+      let i2= actualFileName.lastIndexOf('.');
+      
+      let version=actualFileName.substring(i1 + 1 ,i2);
 console.log(`file version ${version}`);
 
-      var Hash;
-      md5File(path).then(hash => {
-            Hash=hash;
+    var Hash;
+    md5File(path).then(hash => {
+          Hash=hash;
 
-        console.log(`The MD5 sum of LICENSE.md is: ${hash}`)
+      console.log(`The MD5 sum of LICENSE.md is: ${hash}`)
 
-       // filename, timestamp, author, hash, mimetype, path
+      let name=actualFileName.toString();
+    let location=req.file.path.toString();
+    let size=req.file.size.toString()
+    let mimeType=req.file.mimetype.toString();
+    let hashh=Hash.toString();
+    let date=Date.now().toString();
+    let fileoriginalname=req.file.originalname.toString();
+     let author="jim"
+   
+    invoke(req,res ,name,date,author,hashh ,mimeType,location,fileoriginalname,version);
 
+    })
 
-        let name=actualFileName.toString();
-      let location=req.file.path.toString();
-      let size=req.file.size.toString()
-      let mimeType=req.file.mimetype.toString();
-      let hashh=Hash.toString();
-      let date=Date.now().toString();
-      let fileoriginalname=req.file.originalname.toString();
-       let author="jim"
-       
-
-    //  invoke(req,res ,name,location,size,mimeType,hashh ,date);
-
-      invoke(req,res ,name,date,author,hashh ,mimeType,location,fileoriginalname,version);
-
-      })
+  }
+   
 
       
       }
@@ -173,15 +199,8 @@ function   invokeForDocs(req,res ){
         }, function (err, response, body) {
 
           console.log(typeof body);
-          // var stringData=JSON.stringify(body)
-          // var obData= JSON.parse(stringData)
-
+          
        console.log("body",  body.myMessage);
-
-        //console.log("response",response);
-       // console.log(object);
-        // let a= JSON.stringify(body.message );
-        // console.log(a);
 
         notifier.notify({
           title: 'My notification',
@@ -235,15 +254,8 @@ function getVersion(req,res,filename){
 
     console.log("##################response################3");
     console.log(typeof body);
-    // var stringData=JSON.stringify(body)
-    // var obData= JSON.parse(stringData)
-
+   
  console.log("body",  body);
-
-  //console.log("response",response);
- // console.log(object);
-  // let a= JSON.stringify(body.message );
-  // console.log(a);
 
   notifier.notify({
     title: 'My notification',

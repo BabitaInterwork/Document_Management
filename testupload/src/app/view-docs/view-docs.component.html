@@ -24,8 +24,7 @@
           <th scope="row">{{document.Record.orginalname}}</th>
           <td>{{document.Record.author}}</td>
           <td>{{document.Record.timestamp}}</td>
-          <td><button class="btn btn-primary"   (click)="downloadFile($event, document.Record.path,document.Record.filename)">Download</button></td>
-
+          
 
     </tr>
     <tr>
@@ -34,16 +33,28 @@
 
         <div id="table2"  class="table" id="collapse1" class="panel-collapse" [class.collapse]='current != i'>
           
+
+           
+
                   <tbody *ngFor="let doc of versionfiles">
-                  <tr colspan="4" id="tablerow2" (click)="showversion($event,doc.Record.orginalname)">
-                   
-                    <th scope="row">{{doc.orginalname}}</th>
+                     
+                  <tr colspan="4" id="tablerow2" >
+
+                     
+                    <th scope="row">{{doc.filename}}</th>
                     <td>{{doc.author}}</td>
                     <td>{{doc.timestamp}}</td>
-                    <td>V : {{doc.version}}</td>
-                    <td><button class="btn btn-primary"   (click)="downloadFile($event, doc.Record.path,doc.Record.filename)">Download</button></td>
+                    <td>Version  : {{doc.version}}</td>
+                    <td><button class="btn btn-primary"   (click)="download($event, doc.path, doc.filename)">Download</button></td>
                   </tr>
                   </tbody>
+
+                  <div *ngIf= " _loadingforVersion " class="text-center"   >
+
+                      <img src="/assets/waiting.gif" alt="Please wait....">
+                    
+                    </div>
+                    
 
           </div>
           </td>
@@ -58,6 +69,9 @@
 <img id="spinner" class="center" *ngIf="loading" src="assets/waiting.gif"/> -->
 
 
+<div class="text-center">
 
-<div id="paginationcontrol"><pagination-controls (pageChange)="p = $event"></pagination-controls></div>
+    <div id="paginationcontrol"><pagination-controls (pageChange)="p = $event"></pagination-controls></div>
 
+
+</div>
