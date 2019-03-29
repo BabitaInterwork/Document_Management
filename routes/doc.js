@@ -54,9 +54,9 @@ console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Inside");
 
 let countt=count+1
 
-console.log( new Date().toLocaleString()+'_Ver'+countt+ '.txt');
+console.log( Date.now().toLocaleString()+'_Ver'+countt+ '.txt');
 
-    cb(null, new Date()+'_Ver'+countt+ '.txt');
+    cb(null, Date.now()+'_Ver'+countt+ '.txt');
 
 }else{
   
@@ -64,7 +64,7 @@ console.log( new Date().toLocaleString()+'_Ver'+countt+ '.txt');
 
 let countt=count+1;
 
-    cb(null, new Date()+'_Ver'+countt+ a);}
+    cb(null, Date.now()+'_Ver'+countt+ a);}
 
     
 });

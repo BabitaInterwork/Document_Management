@@ -19,12 +19,12 @@
 
       <tbody  *ngFor="let document of DocsOb| paginate: { itemsPerPage: 4, currentPage: p }; let i = index">
 
-        <tr  id="tablerow" (click)="showversion($event,document.Record.orginalname)"  (click)="current = i; loading=true">
+        <tr  id="tablerow" (click)="showversion($event,document.Record.orginalname)"  (click)="current = i; loading=true"  class="bg-secondary" >
 
           <th scope="row">{{document.Record.orginalname}}</th>
           <td>{{document.Record.author}}</td>
           <td>{{document.Record.timestamp}}</td>
-          
+          <td><button class="btn btn-primary"   (click)="download($event, document.Record.path,  document.Record.filename)">Download</button></td>
 
     </tr>
     <tr>

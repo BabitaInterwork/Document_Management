@@ -23,6 +23,9 @@ import {ErrorInterceptorProvider} from './helpers/error.interceptor'
 import {AuthenticateService}  from './authenticate.service';
 import {NgxPaginationModule} from 'ngx-pagination';
 import { DashboardComponent } from './dashboard/dashboard.component'; // <-- import the module
+import { NbThemeModule } from '@nebular/theme';
+import { NbSidebarModule, NbLayoutModule, NbSidebarService } from '@nebular/theme';
+import { RouterModule } from '@angular/router'; 
 
 @NgModule({
   declarations: [
@@ -51,12 +54,15 @@ import { DashboardComponent } from './dashboard/dashboard.component'; // <-- imp
     CommonModule,
     FormsModule ,
     NgxPaginationModule,
-    
+    NbThemeModule.forRoot(),
+    RouterModule, // RouterModule.forRoot(routes, { useHash: true }), if this is your app.module
+    NbLayoutModule,
+    NbSidebarModule,
     NgFlashMessagesModule.forRoot()
   ],
 
   providers: [
-
+    NbSidebarService,
     AuthGuard,
     AlertService,
     AuthenticateService,
