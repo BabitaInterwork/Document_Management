@@ -9,13 +9,13 @@
                 <div class="text-center mu-5 pu-5 mb-5  center"  id="login" >
          
                     <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate  class="form-signin">
-                        <img class="mb-4" src="../../assets/interwork.png" alt="" width="72" height="72">
+                        <img class="mb-4" src="../../assets/interwork.png" alt="interwork" width="72" height="72">
                         <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
         
                         <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
                             <label for="username" class="sr-only">Username</label>
                   
-                            <input type="text" class="form-control" name="username" id="input" [(ngModel)]="model.username" #username="ngModel" required  autofocus  placeholder="username" />
+                            <input type="text"  status="success" class="form-control" name="username" id="input" [(ngModel)]="model.username" #username="ngModel" required  autofocus  placeholder="username" />
                             <div *ngIf="f.submitted && !username.valid" class="help-block">Username is required</div>
                         </div>
         

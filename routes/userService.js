@@ -35,6 +35,8 @@ function authenticate(username, password) {
             deferred.reject(err.name + ': ' + err.message);
         
         }
+            console.log(user)
+            
         if (user && bcrypt.compareSync( password, user.hash  )) {
 
          

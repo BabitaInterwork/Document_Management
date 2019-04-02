@@ -17,7 +17,6 @@ export class FileServiceService {
   ngOnInit(){
    this.authToken= JSON.parse(localStorage.getItem("currentUser")).token
 
-
   }
 
   downloadFile(filepath:String,filename:String ){
@@ -38,7 +37,6 @@ export class FileServiceService {
     });
 }
 
-
 showversion(event,filename:String){
   console.log('====in showversion=====')
 
@@ -53,14 +51,6 @@ showversion(event,filename:String){
       headers:headers
   })
 
-
-
-
 }
-
-
-
-
-
 
 }
